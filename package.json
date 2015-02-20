@@ -1,0 +1,19 @@
+{
+  "name": "doctor-watson",
+  "version": "1.0.0",
+  "description": "BlueMix application that demonstrates combining Watson APIs with Twilio.",
+  "main": "app.js",
+  "dependencies": {
+    "body-parser": "^1.12.0",
+    "cfenv": "^1.0.0",
+    "express": "^4.11.2",
+    "express-xml-bodyparser": "^0.0.7",
+    "request": "^2.53.0",
+    "sox": "^0.1.0",
+    "tmp": "^0.0.24",
+    "twilio": "^1.10.0",
+    "watson-developer-cloud-alpha": "^0.10.4"
+  },
+  "author": "James Thomas",
+  "license": "MIT"
+}
