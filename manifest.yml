@@ -1,0 +1,11 @@
+---
+applications:
+- name: doctor-watson
+  memory: 128M
+  buildpack: https://github.com/jthomas/nodejs-buildpack.git
+  host: doctor-watson
+  command: node app.js
+  services:
+  - twilio
+  - speech_to_text
+  - question_and_answer

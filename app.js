@@ -1,5 +1,5 @@
 var twilio = require('twilio'),
-  cfenv = require('cfenv')
+  cfenv = require('cfenv'),
   express = require('express'),
   xmlparser = require('express-xml-bodyparser'),
   bodyParser = require('body-parser'),
@@ -37,10 +37,6 @@ var enqueue_question = function (recording) {
         });    
       })  
   });    
-}
-
-var app_url = function () {
-
 }
 
 // respond with "hello world" when a GET request is made to the homepage
@@ -96,7 +92,7 @@ app.post('/calls/answer', twilio.webhook(twilio_auth_token), function(req, res) 
   res.send(twiml);
 })
 
-var server = app.listen(3000, function () {
+var server = app.listen(cfenv.getAppEnv().port, function () {
 
   var host = server.address().address
   var port = server.address().port
