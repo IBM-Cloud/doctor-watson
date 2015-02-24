@@ -3,8 +3,9 @@ var twilio = require('twilio'),
   express = require('express'),
   xmlparser = require('express-xml-bodyparser'),
   bodyParser = require('body-parser'),
-  speech = require('./speech.js'),
-  doctor = require('./doctor.js');
+  serveStatic = require('serve-static')
+  speech = require('./lib/speech.js'),
+  doctor = require('./lib/doctor.js');
 
 var service = cfenv.getAppEnv().getService("twilio")
 
@@ -12,6 +13,11 @@ var twilio_account_ssid = service.credentials.accountSID,
   twilio_auth_token = service.credentials.authToken
 
 var client = twilio(twilio_account_ssid, twilio_auth_token);
+var number = "Unavailable";
+
+client.incomingPhoneNumbers.list(function (err, response) {
+  number = response.incoming_phone_numbers[0].phone_number;
+});
 
 var app = express();
 app.use(bodyParser.urlencoded())
@@ -39,10 +45,23 @@ var enqueue_question = function (recording) {
   });    
 }
 
-// respond with "hello world" when a GET request is made to the homepage
+var plates = require('express-plates').init(app);
+
 app.get('/', function(req, res) {
-  res.send('hello world')
-})
+  var map = plates.Map();  
+  map["class"]('btn-danger').to('number');
+  map.where('href').is('xxx').as('href').to('link');
+  
+    res.render('index', {
+        data: {
+            number: "Call Now: " + number,
+            link: "tel:" + number
+        },
+        map: map
+    });
+});
+
+app.use(serveStatic('views'));
 
 app.post('/calls/', twilio.webhook(twilio_auth_token), function(req, res) {
   console.log("New HTTP request for 'calls'");
