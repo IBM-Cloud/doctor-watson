@@ -15,17 +15,16 @@ var twilio_account_ssid = service.credentials.accountSID,
 var client = twilio(twilio_account_ssid, twilio_auth_token);
 var number = "Unavailable";
 
+// Access look up the first phone number bound to the account
 client.incomingPhoneNumbers.list(function (err, response) {
   number = response.incoming_phone_numbers[0].phone_number;
 });
 
-var app = express();
-app.use(bodyParser.urlencoded())
-app.use(xmlparser());
-
 // Used to store a map from call_ssid -> answers
 var answers = {};
 
+// Callback soup stitching together API services used to 
+// convert between an audio recording -> text -> watson answer.
 var enqueue_question = function (recording) {
   var audio_location = recording.RecordingUrl,
     call_ssid = recording.CallSid;
@@ -45,24 +44,12 @@ var enqueue_question = function (recording) {
   });    
 }
 
-var plates = require('express-plates').init(app);
+var app = express();
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(xmlparser());
 
-app.get('/', function(req, res) {
-  var map = plates.Map();  
-  map["class"]('btn-danger').to('number');
-  map.where('href').is('xxx').as('href').to('link');
-  
-    res.render('index', {
-        data: {
-            number: "Call Now: " + number,
-            link: "tel:" + number
-        },
-        map: map
-    });
-});
-
-app.use(serveStatic('views'));
-
+// Twilio callback handling. Set up routes for different parts of the phone
+// call.
 app.post('/calls/', twilio.webhook(twilio_auth_token), function(req, res) {
   console.log("New HTTP request for 'calls'");
   console.log(req.body);
@@ -110,6 +97,26 @@ app.post('/calls/answer', twilio.webhook(twilio_auth_token), function(req, res) 
 
   res.send(twiml);
 })
+
+// Render the index.html page with embedded twilio number
+var plates = require('express-plates').init(app);
+
+app.get('/', function(req, res) {
+  var map = plates.Map();  
+  map["class"]('btn-danger').to('number');
+  map.where('href').is('xxx').as('href').to('link');
+  
+    res.render('index', {
+        data: {
+            number: "Call Now: " + number,
+            link: "tel:" + number
+        },
+        map: map
+    });
+});
+
+// Serve image resources
+app.use(serveStatic('views'));
 
 var server = app.listen(cfenv.getAppEnv().port, function () {
 
