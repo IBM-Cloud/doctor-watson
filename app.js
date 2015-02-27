@@ -3,9 +3,12 @@ var twilio = require('twilio'),
   express = require('express'),
   xmlparser = require('express-xml-bodyparser'),
   bodyParser = require('body-parser'),
-  serveStatic = require('serve-static')
+  serveStatic = require('serve-static'),
+  log = require('loglevel'),
   speech = require('./lib/speech.js'),
   doctor = require('./lib/doctor.js');
+
+log.setLevel("info");
 
 var service = cfenv.getAppEnv().getService("twilio")
 
@@ -17,6 +20,11 @@ var number = "Unavailable";
 
 // Access look up the first phone number bound to the account
 client.incomingPhoneNumbers.list(function (err, response) {
+  if (err) {
+    log.error(err);  
+    return;
+  }
+
   number = response.incoming_phone_numbers[0].phone_number;
 });
 
@@ -30,9 +38,9 @@ var enqueue_question = function (recording) {
     call_ssid = recording.CallSid;
 
   speech.text(audio_location, function (question) { 
-      console.log(call_ssid + " question: " + question);
+      log.info(call_ssid + " QUESTION: " + question);
       doctor.ask(question, function (answer){
-        console.log(call_ssid + " answer: " + answer);
+        log.info(call_ssid + " ANSWER: " + answer);
         answers[call_ssid] = answer;
         
         var forward_to = cfenv.getAppEnv().url + "/calls/answer"
@@ -51,8 +59,9 @@ app.use(xmlparser());
 // Twilio callback handling. Set up routes for different parts of the phone
 // call.
 app.post('/calls/', twilio.webhook(twilio_auth_token), function(req, res) {
-  console.log("New HTTP request for 'calls'");
-  console.log(req.body);
+  log.info(req.body.CallSid + "-> calls/");
+  log.debug(req.body);
+
   var twiml = new twilio.TwimlResponse();
   twiml.say('Hello this is Doctor Watson, how can I help you? Press any key after you have finished speaking')
     .record({timeout: 60, action: "/calls/recording"});
@@ -61,7 +70,9 @@ app.post('/calls/', twilio.webhook(twilio_auth_token), function(req, res) {
 })
 
 app.post('/calls/holding', twilio.webhook(twilio_auth_token), function(req, res) {
-  console.log("New HTTP request for 'calls/holding'");
+  log.info(req.body.CallSid + "-> calls/holding");
+  log.debug(req.body);
+
   var twiml = new twilio.TwimlResponse();
   twiml.pause({length: 5})
     .say("I'm still thinking")    
@@ -72,11 +83,10 @@ app.post('/calls/holding', twilio.webhook(twilio_auth_token), function(req, res)
 
 
 app.post('/calls/recording', twilio.webhook(twilio_auth_token), function(req, res) {
-  console.log("New HTTP request for 'calls/recording'");
+  log.info(req.body.CallSid + "-> calls/recording");
+  log.debug(req.body);
 
   var twiml = new twilio.TwimlResponse();
-
-  console.log(req.body);
 
   enqueue_question(req.body);
 
@@ -85,11 +95,10 @@ app.post('/calls/recording', twilio.webhook(twilio_auth_token), function(req, re
 })
 
 app.post('/calls/answer', twilio.webhook(twilio_auth_token), function(req, res) {
-  console.log("New HTTP request for 'calls/answer'");
+  log.info(req.body.CallSid + "-> calls/answer");
+  log.debug(req.body);
 
   var twiml = new twilio.TwimlResponse();
-
-  console.log(req.body);
 
   twiml.say(answers[req.body.CallSid])
     .say("Do you have another question?")
@@ -123,6 +132,6 @@ var server = app.listen(cfenv.getAppEnv().port, function () {
   var host = server.address().address
   var port = server.address().port
 
-  console.log('Example app listening at http://%s:%s', host, port)
+  log.info('Example app listening at http://%s:%s', host, port)
 
 })
