@@ -3,7 +3,6 @@ applications:
 - name: doctor-watson
   memory: 256M 
   buildpack: https://github.com/jthomas/nodejs-buildpack.git
-  host: doctor-watson
   command: node app.js
   services:
   - twilio
