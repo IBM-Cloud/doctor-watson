@@ -15,7 +15,7 @@
     "sox": "^0.1.0",
     "tmp": "^0.0.24",
     "twilio": "^1.10.0",
-    "watson-developer-cloud-alpha": "^0.10.4"
+    "watson-developer-cloud": "^0.9.3"
   },
   "author": "James Thomas",
   "license": "MIT"
