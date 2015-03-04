@@ -1,4 +1,14 @@
 ---
+declared-services:
+  twilio:
+    label: Twilio
+    plan: 'user-provided'
+  speech_to_text:
+    label: speech_to_text
+    plan: free
+  question_and_answer:
+    label: question_and_answer
+    plan: question_and_answer_free_plan
 applications:
 - name: doctor-watson
   memory: 256M 
