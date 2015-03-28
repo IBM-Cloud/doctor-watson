@@ -7,6 +7,8 @@ Live version available: <a href="http://doctor-watson.mybluemix.net">http://doct
 
 <a href="https://bluemix.net/deploy?repository=https://github.com/jthomas/doctor-watson" target="_blank"><img src="http://bluemix.net/deploy/button.png" alt="Bluemix button" />
 
+[![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/feross/standard)
+
 Setting up on Bluemx
 --------------------
 

@@ -1,14 +1,13 @@
 var express = require('express'),
   cfenv = require('cfenv'),
-  log = require('loglevel');
+  log = require('loglevel')
 
-log.setLevel("info");
+log.setLevel('info')
 
-var app = express();
-var router = require('./routes')(app);
+var app = express()
+require('./routes')(app)
 
 var server = app.listen(cfenv.getAppEnv().port, function () {
-
   var host = server.address().address
   var port = server.address().port
 
