@@ -25,6 +25,14 @@ Once these services are availble, the following command line will start your new
 
 When the deployment has finished, your application will be available at your_app_name.mybluemix.net
 
+Setting up Twilio
+--------------------
+
+Once the application has ben deployed, you need to register the API endpoints with Twilio.
+Using the Twilio [configuration page](https://www.twilio.com/user/account/phone-numbers/incoming), set the sample 
+phone number "Request URL" to HTTP POST incoming requests to http://your_app_name.mybluemix.net/calls for Voice 
+and http://your_app_name.mybluemix.net/sms for Messaging
+
 Running locally
 --------------------
 
