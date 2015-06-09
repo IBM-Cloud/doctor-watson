@@ -18,5 +18,13 @@
     "watson-developer-cloud": "^0.9.3"
   },
   "author": "James Thomas",
-  "license": "MIT"
+  "license": "MIT",
+  "scripts": {
+      "install": "node admin.js track",
+      "start": "node app.js"
+  },
+  "repository": {
+      "type": "git",
+      "url": "https://github.com/IBM-Bluemix/doctor-watson.git"
+  }
 }
