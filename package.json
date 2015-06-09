@@ -15,7 +15,9 @@
     "sox": "^0.1.0",
     "tmp": "^0.0.24",
     "twilio": "^1.10.0",
-    "watson-developer-cloud": "^0.9.3"
+    "watson-developer-cloud": "^0.9.3",
+    "commander": "^2.6.0",
+    "http-post": "^0.1.1"
   },
   "author": "James Thomas",
   "license": "MIT",
