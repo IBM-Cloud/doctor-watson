@@ -14,7 +14,7 @@ Setting up on Bluemx
 
 Pushing this application to Bluemix will allow you to run your own version of Doctor Watson. The following services need to be available, the application will automatically bind to them at runtime... 
 
-Service (service identifiter)
+Service (service identifier)
 * Twilio (twilio)
 * Watson Speech To Text (speech_to_text)
 * Watson Q&A API (question_and_answer)
