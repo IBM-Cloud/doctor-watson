@@ -3,7 +3,7 @@ Doctor Watson
 
 BlueMix application using Watson Cloud Services with Twilio to create your own doctor on the phone.
 
-Live version available: <a href="http://doctor-watson.mybluemix.net">http://doctor-watson.mybluemix.net</a>
+**_This demo app doesn't work due to the deprecation of the IBM Watson Q & A API. We've leaving the code up as a reference on integration Twilio with IBM Watson services._**
 
 <a href="https://bluemix.net/deploy?repository=https://github.com/jthomas/doctor-watson" target="_blank"><img src="http://bluemix.net/deploy/button.png" alt="Bluemix button" />
 
